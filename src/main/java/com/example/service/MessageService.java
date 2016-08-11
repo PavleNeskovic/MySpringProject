@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.model.Message;
+import com.example.model.User;
 import com.example.repository.MessageRepository;
 
 @Service
@@ -26,5 +27,12 @@ public class MessageService {
 		}
 		Message message = messageRepository.save(newMessage);
 		return message;
+	}
+	
+	public Collection<Message> getConversation(User sender, User recever){
+//		String senderEmail = sender.getEmail();
+//		String receverEmail = recever.getEmail();
+		Collection<Message> messages = messageRepository.findBySenderAndRecever(sender, recever);
+		return messages;
 	}
 }

@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 
 import com.example.dto.MessageDto;
 import com.example.dto.UserDto;
@@ -19,10 +20,12 @@ public class Message {
 	
 	private String text;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
+	//@PrimaryKeyJoinColumn
 	private User sender;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
+	//@PrimaryKeyJoinColumn
 	private User recever;
 
 	public Message() {

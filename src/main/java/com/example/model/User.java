@@ -12,9 +12,6 @@ import com.example.dto.UserDto;
 public class User {
 
 	@Id
-	@GeneratedValue
-	private Long id;
-
 	private String email;
 
 	public User() {
@@ -37,13 +34,6 @@ public class User {
 		this.email = email;
 	}
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public UserDto transferToDto() {
 		UserDto dto = new UserDto();
