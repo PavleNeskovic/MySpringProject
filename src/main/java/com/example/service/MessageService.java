@@ -32,7 +32,7 @@ public class MessageService {
 	public Collection<Message> getConversation(User sender, User recever){
 //		String senderEmail = sender.getEmail();
 //		String receverEmail = recever.getEmail();
-		Collection<Message> messages = messageRepository.findBySenderAndRecever(sender, recever);
+		Collection<Message> messages = messageRepository.findByCustomQuery(sender, recever);
 		return messages;
 	}
 }
