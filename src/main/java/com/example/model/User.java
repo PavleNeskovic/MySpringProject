@@ -1,29 +1,50 @@
 package com.example.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 import org.springframework.util.StringUtils;
 
-import com.example.dto.UserDto;
+import com.example.dto.UserCreateForm;
 
 @Entity
+@Table(name = "user")
 public class User {
 
-	@Id
-	private String email;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, updatable = false)
+    private Long id;
 
-	public User() {
-		super();
+    @Column(name = "email", nullable = false, unique = true)
+    private String email;
+    
+    @Column(name = "username", nullable = false)
+    private String username;
+    
+    @Column(name = "password_hash", nullable = false)
+    private String passwordHash;
+
+    @Column(name = "role", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Role role;
+    
+    @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
+	public Long getId() {
+		return id;
 	}
 
-	public User(String email) {
-		this.email = email;
-	}
-
-	public User(UserDto dto) {
-		this.email = dto.getEmail();
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getEmail() {
@@ -34,17 +55,45 @@ public class User {
 		this.email = email;
 	}
 
-
-	public UserDto transferToDto() {
-		UserDto dto = new UserDto();
-		dto.setEmail(getEmail());
-		return dto;
+	public String getUsername() {
+		return username;
 	}
 
-	public void updateFromDto(UserDto dto) {
-		if (StringUtils.isEmpty(dto.getEmail())) {
-			this.setEmail(dto.getEmail());
-		}
+	public void setUsername(String username) {
+		this.username = username;
 	}
+
+	public String getPasswordHash() {
+		return passwordHash;
+	}
+
+	public void setPasswordHash(String passwordHash) {
+		this.passwordHash = passwordHash;
+	}
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
+	public Status getStatus() {
+		return status;
+	}
+
+	public void setStatus(Status status) {
+		this.status = status;
+	}
+
+    
+    
+    
+    
+	
+
+
+
 	
 }

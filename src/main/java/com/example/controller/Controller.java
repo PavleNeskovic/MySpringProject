@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.dto.UserDto;
+import com.example.dto.UserCreateForm;
 import com.example.model.Message;
 import com.example.model.User;
 import com.example.service.MessageService;
@@ -27,31 +27,10 @@ public class Controller {
 	@Autowired
 	private MessageService messageService;
 	
-	@RequestMapping(
-			value = "/api",
-			method = RequestMethod.GET,
-			produces = MediaType.APPLICATION_JSON_VALUE
-			)
-	public ResponseEntity<Collection<UserDto>> getAllUsers(){
-		
-		Collection<UserDto> users = userService.getAll();
-		
-		return new ResponseEntity<Collection<UserDto>>(users, HttpStatus.OK);
-	}
+
 	
 
-	@RequestMapping(
-			value = "/api",
-			method = RequestMethod.POST,
-			produces = MediaType.APPLICATION_JSON_VALUE,
-			consumes = MediaType.APPLICATION_JSON_VALUE
-			)
-	public ResponseEntity<?> createUser(@RequestBody UserDto newUser){
-		
-		UserDto user = userService.create(newUser);
-		
-		return new ResponseEntity<>(user, HttpStatus.CREATED);
-	}
+	
 	
 	@RequestMapping(
 			value = "/api/message",

@@ -8,7 +8,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 
 import com.example.dto.MessageDto;
-import com.example.dto.UserDto;
+import com.example.dto.UserCreateForm;
 
 
 @Entity
