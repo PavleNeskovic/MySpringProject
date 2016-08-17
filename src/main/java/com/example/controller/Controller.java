@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.dto.UserDto;
@@ -39,6 +40,9 @@ public class Controller {
 		return new ResponseEntity<Collection<UserDto>>(users, HttpStatus.OK);
 	}
 	
+	
+	//THIS WILL BE SIGNUP
+	//dodati valid i jos neke stvarcice
 
 	@RequestMapping(
 			value = "/api",
@@ -89,5 +93,19 @@ public class Controller {
 	    		){
 	    	Collection<Message> messages = messageService.getConversation(sender, recever);
 	    	return new ResponseEntity<Collection<Message>>(messages, HttpStatus.OK);
+	}
+	
+	@RequestMapping(
+			value = "/login",
+			method = RequestMethod.POST,
+			consumes = MediaType.APPLICATION_JSON_VALUE,
+			produces = MediaType.APPLICATION_JSON_VALUE
+			)
+	public ResponseEntity<?> login(@RequestBody UserDto user) {
+		user = userService.login(user.getUsername(), user.getPassword());
+		if(user == null) {
+			return new ResponseEntity<>(user, HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 }
