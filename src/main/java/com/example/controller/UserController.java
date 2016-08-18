@@ -49,13 +49,13 @@ public class UserController {
 	    		value = "/contact/{id}",
 	            method = RequestMethod.GET,
 	            produces = MediaType.APPLICATION_JSON_VALUE)
-	    public ResponseEntity<Optional<User>> getUserById(
+	    public ResponseEntity<User> getUserById(
 	    		@PathVariable("id") Long id){
-	    	Optional<User> user = userService.getUserById(id);
+	    	User user = userService.getUserById(id);
 	    	if (user == null) {
-				return new ResponseEntity<Optional<User>>(HttpStatus.NOT_FOUND);
+				return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
 			}
-	    	return new ResponseEntity<Optional<User>>(user, HttpStatus.OK);
+	    	return new ResponseEntity<User>(user, HttpStatus.OK);
 	}
 	    
 	    @RequestMapping(

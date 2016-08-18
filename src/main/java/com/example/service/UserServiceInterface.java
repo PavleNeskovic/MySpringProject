@@ -8,7 +8,7 @@ import com.example.model.User;
 
 public interface UserServiceInterface {
 
-    Optional<User> getUserById(long id);
+    User getUserById(long id);
 
     Optional<User> getUserByEmail(String email);
 
