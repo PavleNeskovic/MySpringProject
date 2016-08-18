@@ -103,6 +103,7 @@ public class Controller {
 			)
 	public ResponseEntity<?> login(@RequestBody UserDto user) {
 		user = userService.login(user.getUsername(), user.getPassword());
+		System.out.println("#########LOGIN LOGIN LOGIN###########");
 		if(user == null) {
 			return new ResponseEntity<>(user, HttpStatus.BAD_REQUEST);
 		}

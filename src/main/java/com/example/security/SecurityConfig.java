@@ -18,12 +18,15 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserDetailsService userDetailsService;
+//    
+//    @Autowired
+//    private BCryptPasswordEncoder passwordEncoder;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 //        http.authorizeRequests()
 //                .antMatchers("/", "/public/**").permitAll()
-//                .antMatchers("/api/**").hasAuthority("ADMIN")
+//                .antMatchers("/api/**").hasAuthority("ROLE_ADMIN")
 //                .anyRequest().fullyAuthenticated()
 //                .and()
 //                .formLogin()
@@ -40,6 +43,7 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
     	//proba sa novim filter chainom, csrf disabled, login default
     //	http.authorizeRequests().anyRequest().authenticated().and().formLogin().and().httpBasic().and().csrf().disable();
     	http.authorizeRequests().antMatchers("/api").hasRole("ADMIN").anyRequest().authenticated().and().formLogin().and().httpBasic().and().csrf().disable();
+    	//http.authorizeRequests().anyRequest().authenticated().and().formLogin().loginPage("/login").and().httpBasic().and().csrf().disable();
     }
 
   /*  @Override
@@ -51,8 +55,10 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
     */
     @Autowired
     public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser("jelena").password("jelena").roles("USER");
-        auth.inMemoryAuthentication().withUser("marina").password("marina").roles("ADMIN");
+        auth.inMemoryAuthentication().withUser("jelena").password("jelena").roles("ROLE_USER");
+        auth.inMemoryAuthentication().withUser("marina").password("marina").roles("ROLE_ADMIN");
+        //auth.userDetailsService(userDetailsService).passwordEncoder(new BCryptPasswordEncoder());
+        
     }
  
     
