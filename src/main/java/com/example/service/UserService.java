@@ -31,7 +31,7 @@ public class UserService implements UserServiceInterface{
 
 	    @Override
 	    public Optional<User> getUserByEmail(String email) {
-	        return userRepository.findOneByEmail(email);
+	       return userRepository.findOneByEmail(email);
 	    }
 
 	    @Override
@@ -49,4 +49,8 @@ public class UserService implements UserServiceInterface{
 	        user.setStatus(form.getStatus());
 	        return userRepository.save(user);
 	    }
+
+		public Optional<User> getUserByUsername(String username) {
+			 return userRepository.findOneByUsername(username);
+		}
 }

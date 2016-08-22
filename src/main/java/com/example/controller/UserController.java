@@ -11,11 +11,13 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,11 +30,14 @@ import com.example.service.UserService;
 import com.example.validator.UserCreateFormValidator;
 
 
+
+
 @RestController
 public class UserController {
 
 	  private final UserService userService;
 	  private final UserCreateFormValidator userCreateFormValidator;
+	  Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
 	    @Autowired
 	    public UserController(UserService userService, UserCreateFormValidator userCreateFormValidator) {
@@ -45,13 +50,29 @@ public class UserController {
 	        binder.addValidators(userCreateFormValidator);
 	    }
 	    
+	    @PreAuthorize("#id == principal.id")
 	    @RequestMapping(
-	    		value = "/contact/{id}",
+	    		value = "/contact/byid/{id}",
 	            method = RequestMethod.GET,
 	            produces = MediaType.APPLICATION_JSON_VALUE)
 	    public ResponseEntity<User> getUserById(
-	    		@PathVariable("id") Long id){
-	    	User user = userService.getUserById(id);
+	    		@PathVariable Long id){
+	    	
+	    	User user = userService.getUserById(id);	    
+	    	if (user == null) {
+				return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
+			}
+	    	return new ResponseEntity<User>(user, HttpStatus.OK);
+	}
+	    
+	    @PreAuthorize("#username == authentication.name")
+	    @RequestMapping(
+	    		value = "/contact/byname/{username}",
+	            method = RequestMethod.GET,
+	            produces = MediaType.APPLICATION_JSON_VALUE)
+	    public ResponseEntity<User> getUserByUsername(
+	    		@PathVariable String username){
+	    	User user = userService.getUserByUsername(username).get();	    
 	    	if (user == null) {
 				return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
 			}
@@ -59,7 +80,7 @@ public class UserController {
 	}
 	    
 	    @RequestMapping(
-	    		value = "/contact/create",
+	    		value = "/create",
 	            method = RequestMethod.GET,
 	            produces = MediaType.APPLICATION_JSON_VALUE)
 	    public ResponseEntity<UserCreateForm> getUserCreatePage(){
@@ -67,7 +88,7 @@ public class UserController {
 	}
 	    
 	    @RequestMapping(
-				value = "/contact/create",
+				value = "/create",
 				method = RequestMethod.POST,
 				produces = MediaType.APPLICATION_JSON_VALUE,
 				consumes = MediaType.APPLICATION_JSON_VALUE
