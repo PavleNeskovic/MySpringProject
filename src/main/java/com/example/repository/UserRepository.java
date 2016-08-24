@@ -11,6 +11,6 @@ import com.example.model.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 	Optional<User> findOneByEmail(String email);
-
+	Optional<User> findByEmail(String email);
 	Optional<User> findOneByUsername(String username);
 }

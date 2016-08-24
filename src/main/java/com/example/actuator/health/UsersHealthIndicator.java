@@ -8,6 +8,7 @@ import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.stereotype.Component;
 
+import com.example.dto.UserDisplayData;
 import com.example.model.User;
 import com.example.service.UserService;
 
@@ -19,7 +20,7 @@ public class UsersHealthIndicator implements HealthIndicator {
 	
 	@Override
 	public Health health() {
-		Collection<User> users = userService.getAllUsers();
+		Collection<UserDisplayData> users = userService.getAllUsers();
 		
 		//Ako se ne podize server uspesno, mozda je prazna baza, pa ulazi u if
 //		if (users == null || users.size() == 0) {

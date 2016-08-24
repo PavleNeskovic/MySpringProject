@@ -2,6 +2,9 @@ package com.example.controller;
 
 
 
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
@@ -22,9 +24,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.dto.UserCreateForm;
-import com.example.model.CurrentUser;
+import com.example.dto.UserDisplayData;
 import com.example.model.User;
-import com.example.model.UserDetails;
 import com.example.service.UserService;
 import com.example.validator.UserCreateFormValidator;
 
@@ -34,6 +35,8 @@ import com.example.validator.UserCreateFormValidator;
 @RestController
 public class UserController {
 
+	  private final String typeAdmin = "ADMIN";
+	  private final String typeUser = "USER";
 	  private final UserService userService;
 	  private final UserCreateFormValidator userCreateFormValidator;
 	    @Autowired
@@ -64,16 +67,16 @@ public class UserController {
 	    
 	    @PreAuthorize("#email == authentication.name || hasAuthority('ROLE_ADMIN')")
 	    @RequestMapping(
-	    		value = "/contact/byemail/{email}",
+	    		value = "/contact/byemail/{email:.+}",
 	            method = RequestMethod.GET,
 	            produces = MediaType.APPLICATION_JSON_VALUE)
-	    public ResponseEntity<User> getUserByEmail(
+	    public ResponseEntity<UserDisplayData> getUserByEmail(
 	    		@PathVariable String email){
-	    	User user = userService.getUserByEmail(email).get();	    
+	    	UserDisplayData user = userService.getUserByEmail(email).get();	    
 	    	if (user == null) {
-				return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
+				return new ResponseEntity<UserDisplayData>(HttpStatus.NOT_FOUND);
 			}
-	    	return new ResponseEntity<User>(user, HttpStatus.OK);
+	    	return new ResponseEntity<UserDisplayData>(user, HttpStatus.OK);
 	}
 	    
 	    @RequestMapping(
@@ -90,27 +93,56 @@ public class UserController {
 				produces = MediaType.APPLICATION_JSON_VALUE,
 				consumes = MediaType.APPLICATION_JSON_VALUE
 				)
-		public String handleUserCreateForm(
+		public void handleUserCreateForm(
 				//Fix @ModelAttribute("form") 
 				@Valid  @RequestBody
 				UserCreateForm form, 
-				BindingResult bindingResult){
-	    	 if (bindingResult.hasErrors()) {
+				BindingResult bindingResult,
+				HttpServletResponse response) throws IOException {
+	    			createAnyone(form, bindingResult, response, typeUser);
+		}
+
+	    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+	    @RequestMapping(
+				value = "/create/admin",
+				method = RequestMethod.POST,
+				produces = MediaType.APPLICATION_JSON_VALUE,
+				consumes = MediaType.APPLICATION_JSON_VALUE
+				)
+		public void handleAdminCreateForm(
+				//Fix @ModelAttribute("form") 
+				@Valid  @RequestBody
+				UserCreateForm form, 
+				BindingResult bindingResult,
+				HttpServletResponse response) throws IOException{
+	    			createAnyone(form, bindingResult, response, typeAdmin);
+		}
+
+	    public void createAnyone(UserCreateForm form, 
+				BindingResult bindingResult,
+				HttpServletResponse response,
+				String userType) throws IOException{
+	    	if (bindingResult.hasErrors()) {
 	    		 System.err.println("Binding Result has errors.");
 	    		 for (ObjectError objectError: bindingResult.getAllErrors()){
 	    			 System.out.println(objectError);
 	    		 }
-	             return "user_create";
+	    		 response.sendRedirect("create/admin");
 	         }
 	         try {
-	             userService.create(form);
+	        	 if (userType.equals(typeAdmin)){
+	        		 userService.createAdmin(form);
+	        	 } else if(userType.equals(typeUser)){
+	        		 userService.create(form);
+	        	 }
+	        	 
 	         } catch (DataIntegrityViolationException e) {
 	             bindingResult.reject("email.exists", "Email already exists");
 	             System.err.println("bindingResult email exists.");
-	             return "user_create";
+	             response.sendRedirect("create/admin");
 	         }
-	         return "redirect:/users";
-		}
-
+	         response.sendRedirect("/login");
+	    	
+	    }
 
 }

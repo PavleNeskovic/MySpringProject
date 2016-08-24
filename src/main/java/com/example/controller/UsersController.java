@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.dto.UserCreateForm;
+import com.example.dto.UserDisplayData;
 import com.example.model.User;
 import com.example.service.UserService;
 
@@ -29,10 +30,10 @@ public class UsersController {
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE
 			)
-	public ResponseEntity<Collection<User>> getAllUsers(){
+	public ResponseEntity<Collection<UserDisplayData>> getAllUsers(){
 		
-		Collection<User> users = userService.getAllUsers();
+		Collection<UserDisplayData> users = userService.getAllUsers();
 		
-		return new ResponseEntity<Collection<User>>(users, HttpStatus.OK);
+		return new ResponseEntity<Collection<UserDisplayData>>(users, HttpStatus.OK);
 	}
 }
