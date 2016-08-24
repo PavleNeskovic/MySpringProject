@@ -5,13 +5,18 @@ import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.dto.MessageDto;
 import com.example.model.Message;
 import com.example.model.User;
 import com.example.repository.MessageRepository;
+import com.example.repository.UserRepository;
 
 @Service
 public class MessageService {
 
+	@Autowired
+	private UserRepository userRepository;
+	
 	@Autowired
 	private MessageRepository messageRepository;
 	
@@ -21,12 +26,16 @@ public class MessageService {
 		return messages;
 	}
 	
-	public Message create(Message newMessage){
-		if (newMessage.getId() != null) {
-			return null;
-		}
-		Message message = messageRepository.save(newMessage);
-		return message;
+	public Message create(MessageDto newMessage){
+//		if (newMessage.getSenderEmail() != null) {
+//			return null;
+//		}
+		Message message = new Message();
+		message.setText(newMessage.getText());
+		message.setRecever(userRepository.findOneByEmail(newMessage.getReceverEmail()).get());
+		message.setSender(userRepository.findOneByEmail(newMessage.getSenderEmail()).get());
+		return messageRepository.save(message);
+
 	}
 	
 	public Collection<Message> getConversation(User sender, User recever){

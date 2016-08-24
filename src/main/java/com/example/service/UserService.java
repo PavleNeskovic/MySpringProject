@@ -50,7 +50,4 @@ public class UserService implements UserServiceInterface{
 	        return userRepository.save(user);
 	    }
 
-		public Optional<User> getUserByUsername(String username) {
-			 return userRepository.findOneByUsername(username);
-		}
 }

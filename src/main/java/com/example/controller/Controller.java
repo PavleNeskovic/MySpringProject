@@ -32,41 +32,5 @@ public class Controller {
 
 	
 	
-	@RequestMapping(
-			value = "/api/message",
-			method = RequestMethod.GET,
-			produces = MediaType.APPLICATION_JSON_VALUE
-			)
-	public ResponseEntity<Collection<Message>> getAllMessages(){
-		
-		Collection<Message> messages = messageService.getAll();
-		
-		return new ResponseEntity<Collection<Message>>(messages, HttpStatus.OK);
-	}
 	
-
-	@RequestMapping(
-			value = "/api/message",
-			method = RequestMethod.POST,
-			produces = MediaType.APPLICATION_JSON_VALUE,
-			consumes = MediaType.APPLICATION_JSON_VALUE
-			)
-	public ResponseEntity<?> createMessage(@RequestBody Message newMessage){
-		
-		Message message = messageService.create(newMessage);
-		
-		return new ResponseEntity<>(message, HttpStatus.CREATED);
-	}
-	
-	 @RequestMapping(
-	    		value = "/api/{sender}/{recever}",
-	            method = RequestMethod.GET,
-	            produces = MediaType.APPLICATION_JSON_VALUE)
-	    public ResponseEntity<Collection<Message>> getConversation(
-	    		@PathVariable("sender") User sender,
-	    		@PathVariable("recever") User recever
-	    		){
-	    	Collection<Message> messages = messageService.getConversation(sender, recever);
-	    	return new ResponseEntity<Collection<Message>>(messages, HttpStatus.OK);
-	}
 }
