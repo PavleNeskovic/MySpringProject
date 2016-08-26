@@ -42,7 +42,7 @@ public class Controller {
 	
 	
 	//THIS WILL BE SIGNUP
-	//dodati valid i jos neke stvarcice
+	//dodati valid
 
 	@RequestMapping(
 			value = "/api",
