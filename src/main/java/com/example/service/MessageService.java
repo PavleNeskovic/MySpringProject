@@ -1,10 +1,12 @@
 package com.example.service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.dto.MessageCreateDto;
 import com.example.dto.MessageDto;
 import com.example.dto.UserDisplayData;
 import com.example.model.Message;
@@ -45,9 +47,24 @@ public class MessageService {
 
 	}
 	
-	public Collection<Message> getConversation(User sender, String receverUsername){
+//	public Message create(MessageCreateDto newMessage) {
+//		Message message = new Message();
+//		message.setText(newMessage.getText());
+//		//message.setRecever(userService.getUserDisplayDataByUsername(newMessage.getUsernameReceiver()).get());
+//		//message.setRecever(userService.getUserByUsername(newMessage.getUsernameReceiver()));
+//		message.setRecever(userService.getUserByUsername(newMessage.getUsernameReceiver()));
+//		message.setSender(userService.getUserByUsername(newMessage.getUsernameSender()));
+//		return messageRepository.save(message);
+//	}
+	
+	//mora se modifikovati messagerepo da vraca kolekciju message dtos
+	public Collection<MessageDto> getConversation(User sender, String receverUsername){
 		User recever = userRepository.findOneByUsername(receverUsername).get();
 		Collection<Message> messages = messageRepository.findByCustomQuery(sender, recever);
-		return messages;
+		Collection<MessageDto> messagesDtos = new ArrayList<>();
+		for (Message message : messages) {
+			messagesDtos.add(message.transferToDto());
+		}
+		return messagesDtos;
 	}
 }

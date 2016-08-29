@@ -11,7 +11,9 @@ import javax.persistence.Table;
 
 import org.springframework.util.StringUtils;
 
+import com.example.dto.MessageDto;
 import com.example.dto.UserCreateForm;
+import com.example.dto.UserDisplayData;
 
 @Entity
 @Table(name = "user")
@@ -87,13 +89,13 @@ public class User {
 		this.status = status;
 	}
 
-    
-    
-    
-    
-	
-
-
-
+	public UserDisplayData transferToDto() {
+		UserDisplayData userDisplayData = new UserDisplayData();
+		userDisplayData.setUsername(getUsername());
+		userDisplayData.setEmail(getEmail());
+		userDisplayData.setRole(getRole());
+		userDisplayData.setStatus(getStatus());
+		return userDisplayData;
+	}
 	
 }

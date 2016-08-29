@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.dto.MessageCreateDto;
 import com.example.dto.MessageDto;
 import com.example.dto.UserDisplayData;
 import com.example.model.Message;
@@ -64,18 +65,31 @@ public class MessageController {
 		return new ResponseEntity<>(messageService.create(newMessage), HttpStatus.CREATED);
 	}
 	
-	 @RequestMapping(
-	    		value = "/message/{recever}", 
-	            method = RequestMethod.GET,
-	            produces = MediaType.APPLICATION_JSON_VALUE)
-	    public ResponseEntity<Collection<Message>> getConversation(
-	    		@PathVariable("recever") String receverUsername){
-		 Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-			User sender = userService.getUserByUsername(auth.getName());
-			//SecurityContextHolder.clearContext();
-	    	Collection<Message> messages = messageService.getConversation(sender, receverUsername);
-	    	return new ResponseEntity<Collection<Message>>(messages, HttpStatus.OK);
-	}
+//	 @RequestMapping(
+//	    		value = "/message/{recever}", 
+//	            method = RequestMethod.GET,
+//	            produces = MediaType.APPLICATION_JSON_VALUE)
+//	    public ResponseEntity<Collection<Message>> getConversation(
+//	    		@PathVariable("recever") String receverUsername){
+//		 Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//			User sender = userService.getUserByUsername(auth.getName());
+//			//SecurityContextHolder.clearContext();
+//	    	Collection<Message> messages = messageService.getConversation(sender, receverUsername);
+//	    	return new ResponseEntity<Collection<Message>>(messages, HttpStatus.OK);
+//	}
+	
+	@RequestMapping(
+    		value = "/message/{recever}", 
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Collection<MessageDto>> getConversation(
+    		@PathVariable("recever") String receverUsername){
+	 Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User sender = userService.getUserByUsername(auth.getName());
+		//SecurityContextHolder.clearContext();
+    	Collection<MessageDto> messages = messageService.getConversation(sender, receverUsername);
+    	return new ResponseEntity<Collection<MessageDto>>(messages, HttpStatus.OK);
+}
 	
 
 	

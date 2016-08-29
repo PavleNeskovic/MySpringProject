@@ -47,10 +47,13 @@ public class UserService implements UserServiceInterface{
     		return userDto;
 	    }
 	    
+	    //TODO
 	    @Override
 	    public Optional<UserDisplayData> getUserDisplayDataByUsername(String name) {
 	    	Optional<UserDisplayData> userDto = Optional.of(new UserDisplayData());
 	    	User user = userRepository.findOneByUsername(name).get();
+	    	//probati da li radi kasnije (mozda je lepse)
+	    	//user.transferToDto();
     		userDto.get().setEmail(user.getEmail());
     		userDto.get().setUsername(user.getUsername());
     		userDto.get().setRole(user.getRole());
