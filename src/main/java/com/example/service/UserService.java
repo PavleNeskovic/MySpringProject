@@ -30,6 +30,11 @@ public class UserService implements UserServiceInterface{
 	    public User getUserById(long id) {
 	        return userRepository.findOne(id);
 	    }
+	    
+	    
+	    public User getUserByUsername(String username) {
+	        return userRepository.findOneByUsername(username).get();
+	    }
 
 	    @Override
 	    public Optional<UserDisplayData> getUserByEmail(String email) {
@@ -43,7 +48,7 @@ public class UserService implements UserServiceInterface{
 	    }
 	    
 	    @Override
-	    public Optional<UserDisplayData> getUserByUsername(String name) {
+	    public Optional<UserDisplayData> getUserDisplayDataByUsername(String name) {
 	    	Optional<UserDisplayData> userDto = Optional.of(new UserDisplayData());
 	    	User user = userRepository.findOneByUsername(name).get();
     		userDto.get().setEmail(user.getEmail());

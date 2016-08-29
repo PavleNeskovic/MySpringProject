@@ -10,10 +10,12 @@ import com.example.model.User;
 public interface UserServiceInterface {
 
     User getUserById(long id);
+    
+    User getUserByUsername(String username);
 
     Optional<UserDisplayData> getUserByEmail(String email);
     
-    Optional<UserDisplayData> getUserByUsername(String name);
+    Optional<UserDisplayData> getUserDisplayDataByUsername(String name);
 
     Collection<UserDisplayData> getAllUsers();
 

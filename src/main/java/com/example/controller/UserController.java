@@ -66,8 +66,9 @@ public class UserController {
 	public ResponseEntity<UserDisplayData> getUserByUsername() {
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		UserDisplayData user = userService.getUserByUsername(auth.getName()).get();
-		SecurityContextHolder.clearContext();
+		UserDisplayData user = userService.getUserDisplayDataByUsername(auth.getName()).get();
+		//System.out.println(auth.getName()); prints username
+		//SecurityContextHolder.clearContext();
 		if (user == null) {
 			return new ResponseEntity<UserDisplayData>(HttpStatus.NOT_FOUND);
 		}
