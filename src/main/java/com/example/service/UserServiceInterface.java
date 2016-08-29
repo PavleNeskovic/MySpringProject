@@ -12,6 +12,8 @@ public interface UserServiceInterface {
     User getUserById(long id);
 
     Optional<UserDisplayData> getUserByEmail(String email);
+    
+    Optional<UserDisplayData> getUserByUsername(String name);
 
     Collection<UserDisplayData> getAllUsers();
 

@@ -42,6 +42,17 @@ public class UserService implements UserServiceInterface{
     		return userDto;
 	    }
 	    
+	    @Override
+	    public Optional<UserDisplayData> getUserByUsername(String name) {
+	    	Optional<UserDisplayData> userDto = Optional.of(new UserDisplayData());
+	    	User user = userRepository.findOneByUsername(name).get();
+    		userDto.get().setEmail(user.getEmail());
+    		userDto.get().setUsername(user.getUsername());
+    		userDto.get().setRole(user.getRole());
+    		userDto.get().setStatus(user.getStatus());
+    		return userDto;
+	    }
+	    
 	    //cheat
 	    public Optional<User> getUserByEmail2(String email) {
 	    	
