@@ -51,8 +51,8 @@ public class MessageController {
     		value = "/message",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<MessageDto> getMessageCreatePage(){
-    	return new ResponseEntity<MessageDto>(new MessageDto(), HttpStatus.OK);
+    public ResponseEntity<MessageCreateDto> getMessageCreatePage(){
+    	return new ResponseEntity<MessageCreateDto>(new MessageCreateDto(), HttpStatus.OK);
 }
 
 	@RequestMapping(
@@ -61,7 +61,18 @@ public class MessageController {
 			produces = MediaType.APPLICATION_JSON_VALUE,
 			consumes = MediaType.APPLICATION_JSON_VALUE
 			)
-	public ResponseEntity<?> createMessage(@RequestBody MessageDto newMessage){		
+	public ResponseEntity<?> createMessage(@RequestBody MessageCreateDto newMessage){	
+		 Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+			User sender = userService.getUserByUsername(auth.getName());
+			System.out.println(sender.getUsername());
+			System.out.println(newMessage.getUsernameSender());
+			System.out.println(!sender.getUsername().equals(newMessage.getUsernameSender()));
+			if (!sender.getUsername().equals(newMessage.getUsernameSender())) {
+				System.out.println("nisam ovde");
+				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+			}
+			//SecurityContextHolder.clearContext();
+			messageService.create(newMessage);
 		return new ResponseEntity<>(messageService.create(newMessage), HttpStatus.CREATED);
 	}
 	
@@ -82,13 +93,13 @@ public class MessageController {
     		value = "/message/{recever}", 
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Collection<MessageDto>> getConversation(
+    public ResponseEntity<Collection<MessageCreateDto>> getConversation(
     		@PathVariable("recever") String receverUsername){
 	 Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User sender = userService.getUserByUsername(auth.getName());
 		//SecurityContextHolder.clearContext();
-    	Collection<MessageDto> messages = messageService.getConversation(sender, receverUsername);
-    	return new ResponseEntity<Collection<MessageDto>>(messages, HttpStatus.OK);
+    	Collection<MessageCreateDto> messages = messageService.getConversation(sender, receverUsername);
+    	return new ResponseEntity<Collection<MessageCreateDto>>(messages, HttpStatus.OK);
 }
 	
 

@@ -33,7 +33,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.authorizeRequests()
 		.antMatchers("/contacts").authenticated()
 		.antMatchers("/profile").authenticated()
+		.antMatchers("/message").authenticated()
 		.antMatchers("/create").permitAll()
+		.and().httpBasic()
 		.and().formLogin()
 		.and().csrf().disable();
 		  

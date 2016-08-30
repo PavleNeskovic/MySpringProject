@@ -33,37 +33,48 @@ public class MessageService {
 	}
 	
 	//TODO: email radi sa username-om jer treba da se setuje da username bude unique u bazi. Hack.
-	public Message create(MessageDto newMessage){
-//		if (newMessage.getSenderEmail() != null) {
-//			return null;
-//		}
-		Message message = new Message();
-		message.setText(newMessage.getText());
-		message.setRecever(userService.getUserByUsername(newMessage.getReceverEmail()));
-//		//message.setRecever(userRepository.findOneByEmail(newMessage.getReceverEmail()).get());
-//		message.setSender(userRepository.findOneByEmail(newMessage.getSenderEmail()).get());
-		message.setSender(userService.getUserByUsername(newMessage.getSenderEmail()));
-		return messageRepository.save(message);
-
-	}
-	
-//	public Message create(MessageCreateDto newMessage) {
+//	public Message create(MessageDto newMessage){
+////		if (newMessage.getSenderEmail() != null) {
+////			return null;
+////		}
 //		Message message = new Message();
 //		message.setText(newMessage.getText());
-//		//message.setRecever(userService.getUserDisplayDataByUsername(newMessage.getUsernameReceiver()).get());
-//		//message.setRecever(userService.getUserByUsername(newMessage.getUsernameReceiver()));
-//		message.setRecever(userService.getUserByUsername(newMessage.getUsernameReceiver()));
-//		message.setSender(userService.getUserByUsername(newMessage.getUsernameSender()));
+//		message.setRecever(userService.getUserByUsername(newMessage.getReceverEmail()));
+////		//message.setRecever(userRepository.findOneByEmail(newMessage.getReceverEmail()).get());
+////		message.setSender(userRepository.findOneByEmail(newMessage.getSenderEmail()).get());
+//		message.setSender(userService.getUserByUsername(newMessage.getSenderEmail()));
 //		return messageRepository.save(message);
+//
 //	}
 	
-	//mora se modifikovati messagerepo da vraca kolekciju message dtos
-	public Collection<MessageDto> getConversation(User sender, String receverUsername){
+	public MessageCreateDto create(MessageCreateDto newMessage) {
+		Message message = new Message();
+		message.setText(newMessage.getText());
+		//message.setRecever(userService.getUserDisplayDataByUsername(newMessage.getUsernameReceiver()).get());
+		//message.setRecever(userService.getUserByUsername(newMessage.getUsernameReceiver()));
+		message.setRecever(userService.getUserByUsername(newMessage.getUsernameReceiver()));
+		message.setSender(userService.getUserByUsername(newMessage.getUsernameSender()));
+		System.out.println("receiver:" + message.getRecever());
+		System.out.println("sender:" + message.getSender());
+		messageRepository.save(message);
+		return newMessage;
+	}
+	
+//	public Collection<MessageDto> getConversation(User sender, String receverUsername){
+//		User recever = userRepository.findOneByUsername(receverUsername).get();
+//		Collection<Message> messages = messageRepository.findByCustomQuery(sender, recever);
+//		Collection<MessageDto> messagesDtos = new ArrayList<>();
+//		for (Message message : messages) {
+//			messagesDtos.add(message.transferToDto());
+//		}
+//		return messagesDtos;
+//	}
+	public Collection<MessageCreateDto> getConversation(User sender, String receverUsername){
 		User recever = userRepository.findOneByUsername(receverUsername).get();
 		Collection<Message> messages = messageRepository.findByCustomQuery(sender, recever);
-		Collection<MessageDto> messagesDtos = new ArrayList<>();
+		Collection<MessageCreateDto> messagesDtos = new ArrayList<>();
 		for (Message message : messages) {
-			messagesDtos.add(message.transferToDto());
+			messagesDtos.add(message.transferToCreateDto());
 		}
 		return messagesDtos;
 	}

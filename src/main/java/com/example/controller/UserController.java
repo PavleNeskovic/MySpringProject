@@ -76,7 +76,9 @@ public class UserController {
 		return new ResponseEntity<UserDisplayData>(user, HttpStatus.OK);
 
 	}
-
+	//get nije neophodan
+	//jedino ako se sa servera vraca nesto dodatno, tipa csrf token, onda ima smislia da se salje get pri signupu
+	//token posle sluzi prilikom posta
 	@RequestMapping(value = "/create", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<UserCreateForm> getUserCreatePage() {
 		return new ResponseEntity<UserCreateForm>(new UserCreateForm(), HttpStatus.OK);

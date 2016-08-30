@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 
+import com.example.dto.MessageCreateDto;
 import com.example.dto.MessageDto;
 import com.example.dto.UserCreateForm;
 
@@ -86,5 +87,11 @@ public class Message {
 		return dto;
 	}
 	
-
+	public MessageCreateDto transferToCreateDto() {
+		MessageCreateDto dto = new MessageCreateDto();
+		dto.setText(getText());
+		dto.setUsernameSender(getSender().getUsername());
+		dto.setUsernameReceiver(getRecever().getUsername());
+		return dto;
+	}
 }
