@@ -50,7 +50,7 @@ public class UserController {
 	public void initBinder(WebDataBinder binder) {
 		binder.addValidators(userCreateFormValidator);
 	}
-
+	//random comment
 	// @PreAuthorize("#id == userId")
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	@RequestMapping(value = "/contact/byid/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
