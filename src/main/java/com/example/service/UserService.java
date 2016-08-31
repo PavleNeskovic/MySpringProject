@@ -20,6 +20,7 @@ import com.example.repository.UserRepository;
 public class UserService implements UserServiceInterface{
 
 	 private final UserRepository userRepository;
+	 private String conflict;
 
 	    @Autowired
 	    public UserService(UserRepository userRepository) {
