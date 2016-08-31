@@ -27,6 +27,7 @@ public class UsersController {
         this.userService = userService;
     }
 	
+    //TODO: Zameniti contacts sa kodom pagination - merge
 	@RequestMapping(
 			value = "/contacts",
 			method = RequestMethod.GET,
