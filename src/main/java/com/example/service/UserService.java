@@ -2,9 +2,14 @@ package com.example.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -104,5 +109,23 @@ public class UserService implements UserServiceInterface{
 	        user.setStatus(form.getStatus());
 	        return userRepository.save(user);
 	    }
+
+		@Override
+		public Page<UserDisplayData> listAllByPage(Pageable pageable) {
+			Page<User> users = userRepository.findAll(pageable);
+			List<UserDisplayData> userDtos = new ArrayList<>();
+			for (User user : users) {
+				UserDisplayData userDto = new UserDisplayData();
+	    		userDto.setEmail(user.getEmail());
+	    		userDto.setUsername(user.getUsername());
+	    		userDto.setRole(user.getRole());
+	    		userDto.setStatus(user.getStatus());
+	    		userDtos.add(userDto);
+			}
+			Page<UserDisplayData> userDtosPage = new PageImpl<UserDisplayData>(userDtos, pageable, userDtos.size());
+			return userDtosPage;
+		}
+	    
+	    
 
 }
